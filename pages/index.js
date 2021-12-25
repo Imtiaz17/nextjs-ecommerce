@@ -3,12 +3,32 @@ import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
 import { FeaturedCategories } from '../components/FeaturedCategories';
 import { HomeProduct } from '../components/HomeProduct';
+import Axios from "axios";
+import { useEffect, useState } from 'react';
+
 
 export default function Home() {
+  const [categories, setCategories] = useState([]);
+  const [featuredFategories, setFeaturedFategories] = useState([]);
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  const getCategories = () => {
+    Axios.get('/categories').then(res => {
+      setCategories(res.data.categoryList);
+      let featuredCats=res.data.categoryList.filter(item=>{
+        return item.featured==1
+      })
+      setFeaturedFategories(featuredCats)
+    })
+  }
+
+
   return (
     <div>
       <Header />
-      <Navbar />
+      <Navbar categories={categories}  />
       {/* banner */}
       <div className="bg-cover bg-no-repeat bg-center py-40" style={{ backgroundImage: "url('images/slide-1.jpg')" }}>
         <div className="container">
@@ -56,7 +76,7 @@ export default function Home() {
         </div>
       </div>
       {/* features section */}
-      <FeaturedCategories />
+      <FeaturedCategories cats={featuredFategories} />
       {/* new product wrapper */}
       <div className="container pb-16">
         <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">top new arrival</h2>
@@ -64,7 +84,7 @@ export default function Home() {
       </div>
       {/* new product wrapper end */}
       {/*ad section  */}
-      <div class="container pb-16">
+      <div className="container pb-16">
         <a href="#">
           <img src="images/slide_3.jpg" alt="banner" className="w-full" />
         </a>

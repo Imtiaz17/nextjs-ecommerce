@@ -1,4 +1,4 @@
-export const Navbar = () => {
+export const Navbar = (props) => {
     return (
         <div>
             {/* navbar */}
@@ -13,19 +13,12 @@ export const Navbar = () => {
                             <span className="ml-2 capitalize text-white">All Category</span>
                         </div>
                         <div
-                            className="absolute w-full left-15 top-full bg-white shadow-md divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible ">
-                            <a className="flex items-center py-3 px-6 hover:bg-gray-100 transition">
-                                <span className="text-gray-600 text-sm">Sofa</span>
-                            </a>
-                            <a className="flex items-center py-3 px-6 hover:bg-gray-100 transition">
-                                <span className="text-gray-600 text-sm">Sofa</span>
-                            </a>
-                            <a className="flex items-center py-3 px-6 hover:bg-gray-100  transition">
-                                <span className="text-gray-600 text-sm">Sofa</span>
-                            </a>
-                            <a className="flex items-center py-3 px-6 hover:bg-gray-100  transition">
-                                <span className="text-gray-600 text-sm">Sofa</span>
-                            </a>
+                            className="absolute w-full left-15 top-full bg-white shadow-md divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-80 overflow-auto ">
+                            {props.categories.map(cat => {
+                                return <a className="flex items-center py-3 px-6 hover:bg-gray-100 transition">
+                                    <span className="text-gray-600 text-sm">{cat.name}</span>
+                                </a>
+                            })}
                         </div>
 
                     </div>

@@ -8,6 +8,10 @@
 // import App from 'next/app'
 import '../styles/style.css'
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Axios from "axios";
+
+Axios.defaults.baseURL = "http://localhost:3000/api";
+Axios.defaults.withCredentials = true;
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
