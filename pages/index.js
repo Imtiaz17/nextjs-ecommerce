@@ -6,12 +6,15 @@ import { HomeProduct } from '../components/HomeProduct';
 import Axios from "axios";
 import { useEffect, useState } from 'react';
 
-
 export default function Home() {
   const [categories, setCategories] = useState([]);
-  const [featuredFategories, setFeaturedFategories] = useState([]);
+  const [featuredCategories, setFeaturedCategories] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [recentProducts, setRecentProducts] = useState([]);
   useEffect(() => {
     getCategories()
+    getFeaturedProduct()
+    getRecentProducts()
   }, [])
 
   const getCategories = () => {
@@ -20,7 +23,17 @@ export default function Home() {
       let featuredCats=res.data.categoryList.filter(item=>{
         return item.featured==1
       })
-      setFeaturedFategories(featuredCats)
+      setFeaturedCategories(featuredCats)
+    })
+  }
+  const getFeaturedProduct = () => {
+    Axios.get('/featuredproducts').then(res => {
+      setFeaturedProducts(res.data.product);
+    })
+  }
+  const getRecentProducts = () => {
+    Axios.get('/newproducts').then(res => {
+      setRecentProducts(res.data.product);
     })
   }
 
@@ -28,7 +41,7 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <Navbar categories={categories}  />
+      <Navbar/>
       {/* banner */}
       <div className="bg-cover bg-no-repeat bg-center py-40" style={{ backgroundImage: "url('images/slide-1.jpg')" }}>
         <div className="container">
@@ -76,11 +89,11 @@ export default function Home() {
         </div>
       </div>
       {/* features section */}
-      <FeaturedCategories cats={featuredFategories} />
+      <FeaturedCategories cats={featuredCategories} />
       {/* new product wrapper */}
       <div className="container pb-16">
         <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">top new arrival</h2>
-        <HomeProduct />
+        <HomeProduct data={recentProducts} />
       </div>
       {/* new product wrapper end */}
       {/*ad section  */}
@@ -92,8 +105,8 @@ export default function Home() {
       {/* ad section end  */}
       {/* recommanded product wrapper */}
       <div className="container pb-16">
-        <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">top new arrival</h2>
-        <HomeProduct />
+        <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">Featured Products</h2>
+        <HomeProduct data={featuredProducts} />
       </div>
       {/* recommanded product wrapper end */}
       <Footer />
