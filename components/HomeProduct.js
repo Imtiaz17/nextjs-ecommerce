@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export const HomeProduct = (props) => {
     return (
         <div>
@@ -9,7 +11,7 @@ export const HomeProduct = (props) => {
                     return <div className="bg-white shadow rounded overflow-hidden group">
                         {/* product image  */}
                         <div className="relative w-40 h-40 mx-auto flex justify-center items-center">
-                            <img src={`http://localhost:3000/public/${item.productPic[0].img}`}  className="max-w-full max-h-full" alt="" />
+                            <img src={`http://localhost:3000/public/${item.productPic[0].img}`} className="max-w-full max-h-full" alt="" />
                             <div
                                 className="absolute inset-0 bg-black bg-opacity-40 flex justify-center items-center gap-2 opacity-0 group-hover:opacity-100 transition">
                                 <a href="#"
@@ -25,10 +27,12 @@ export const HomeProduct = (props) => {
                         {/* product image  */}
                         {/* product content */}
                         <div className="pt-4 pb-3 px-4">
-                            <a href="">
-                                <h4 className="text-xl font-medium min-h-full h-20 text-gray-800 uppercase mb-6 hover:text-primary transition">{item.name}
-                                </h4>
-                            </a>
+                            <Link href={`/product/${item.slug}`} >
+                                <a>
+                                    <h4 className="text-xl font-medium min-h-full h-20 text-gray-800 uppercase mb-6 hover:text-primary transition">{item.name}
+                                    </h4>
+                                </a>
+                            </Link>
                             <div className="flex items-baseline mb-1 space-x-2 font-roboto">
                                 <p className="text-xl text-primary font-semibold">${item.sell_price}</p>
                                 {/* <p className="text-sm text-gray-400 line-through">$55.00</p> */}

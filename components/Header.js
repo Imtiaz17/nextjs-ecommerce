@@ -1,3 +1,5 @@
+import Link from "next/link"
+import Image from 'next/image'
 export const Header = () => {
     return (
         <div>
@@ -5,9 +7,11 @@ export const Header = () => {
             <header className="py-4 bg-white">
                 <div className="container flex items-center justify-between">
 
-                    <a href="">
-                        <img src="images/logo.png" className="w-32" alt="logo" />
-                    </a>
+                    <Link href="/">
+                        <a>
+                        <Image src="/images/logo.png" alt="me" className="w-32" width="100%" height="32" />
+                        </a>
+                    </Link>    
 
                     <div className="w-full max-w-xl relative flex">
                         <span className="absolute left-4 top-3 text-gray-400">
@@ -29,7 +33,8 @@ export const Header = () => {
                             <span
                                 className="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">4</span>
                         </a>
-                        <a href="" className="text-center text-gray-700 hover:text-primary transition relative">
+                        <Link href={'/cart'} >
+                        <a  className="text-center text-gray-700 hover:text-primary transition relative">
                             <div className="text-2xl">
                                 <i className="bi bi-cart2"></i>
                             </div>
@@ -37,6 +42,7 @@ export const Header = () => {
                             <span
                                 className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">4</span>
                         </a>
+                        </Link>
                         <a href="" className="text-center text-gray-700 hover:text-primary transition relative">
                             <div className="text-2xl">
                                 <i className="bi bi-person"></i>

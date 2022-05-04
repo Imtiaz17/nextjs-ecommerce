@@ -5,7 +5,8 @@ import { FeaturedCategories } from '../components/FeaturedCategories';
 import { HomeProduct } from '../components/HomeProduct';
 import Axios from "axios";
 import { useEffect, useState } from 'react';
-
+Axios.defaults.baseURL =  "http://localhost:3000/api";
+Axios.defaults.withCredentials = true;
 export default function Home() {
   const [categories, setCategories] = useState([]);
   const [featuredCategories, setFeaturedCategories] = useState([]);

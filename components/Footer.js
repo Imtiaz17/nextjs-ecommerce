@@ -1,3 +1,4 @@
+import Image from 'next/image'
 export const Footer = () => {
     return (
         <div>
@@ -6,7 +7,7 @@ export const Footer = () => {
                 <div className="container grid grid-cols-3 gap-10">
                     {/* footer logo & text */}
                     <div className="col-span-1 space-y-5">
-                        <img src="images/logo.png" className="w-32" alt="logo" />
+                    <Image src="/images/logo.png" alt="me" className="w-32" width="100%" height="32" />
                         <p className="text-gray-800">
                             Lorem ipsum, or lipsum as it is sometimes kno wn, is dummy text used in laying out print, gra phic
                             or web designs the passage.
@@ -81,7 +82,7 @@ export const Footer = () => {
             <div className="bg-gray-800 py-4">
                 <div className="container flex justify-between items-center">
                     <p className="text-white">© FastCart - All Rights Reserved</p>
-                    <img src="images/payment-method.png" alt="payment-method" className="h-5" />
+                    <Image src="/images/payment-method.png" alt="payment-method" className="h-5" width="250" height="20" />
                 </div>
 
             </div>
