@@ -12,6 +12,7 @@ Axios.defaults.withCredentials = true;
 const Details = ({ data }) => {
     const [quantity, setQuantity] = useState(1);
     const [rProducts, setRProducts] = useState(1);
+    const [cart, setCart] = useState({});
     const handleQtyChange = (event) => {
         console.log(event.target.value);
     };
@@ -23,7 +24,25 @@ const Details = ({ data }) => {
             setQuantity(quantity - 1)
         }
     }
+    function addToCart(data) {
+        let cart_id=localStorage.getItem("cart_uuid")?localStorage.getItem("cart_uuid"):null
+        let item={
+            product:data.id,
+            quantity:quantity,
+            price:data.price,
+        }
+        Axios.post('/addtocart/',{cartItems:item,cart_id:cart_id}).then(res => {
+            if(cart_id==null)
+            {
+                localStorage.setItem("cart_uuid", res.data.cart._id);
+            }   
+            
+        })
+
+      }
     useEffect(() => {
+
+        
         if (data) {
             Axios.post('/related-products/',data).then(res => {
                 setRProducts(res.data.product);
@@ -46,7 +65,7 @@ const Details = ({ data }) => {
                 <span className="text-sm text-gray-400">
                     <i className="bi bi-chevron-right"></i>
                 </span>
-                <p className="text-gray-600 font-medium">Men's Adidas Courtsmash</p>
+                <p className="text-gray-600 font-medium">{data.name}</p>
             </div>
             {/* breadcrumb end  */}
 
@@ -169,10 +188,10 @@ const Details = ({ data }) => {
 
 
                     <div className="flex gap-4 border-b border-gray-200 pb-6 mt-6">
-                        <a href="#"
+                        <button  onClick={() => addToCart(data)}
                             className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
                             <i className="bi bi-cart3"></i> Add to cart
-                        </a>
+                        </button >
                         <a href="#"
                             className="bg-white border border-primary text-primary px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-primary hover:text-white transition">
                             <i className="bi bi-heart"></i>Wishlist
