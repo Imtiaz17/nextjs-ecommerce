@@ -5,6 +5,7 @@ import { FeaturedCategories } from '../components/FeaturedCategories';
 import { HomeProduct } from '../components/HomeProduct';
 import Axios from "axios";
 import { useEffect, useState } from 'react';
+
 Axios.defaults.baseURL =  "http://localhost:3000/api";
 Axios.defaults.withCredentials = true;
 export default function Home() {
@@ -38,10 +39,10 @@ export default function Home() {
     })
   }
 
-
   return (
     <div>
       <Header />
+     
       <Navbar/>
       {/* banner */}
       <div className="bg-cover bg-no-repeat bg-center py-40" style={{ backgroundImage: "url('images/slide-1.jpg')" }}>

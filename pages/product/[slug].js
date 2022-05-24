@@ -7,6 +7,9 @@ import Image from 'next/image'
 import { HomeProduct } from '../../components/HomeProduct';
 import { useEffect, useState } from 'react';
 import QuantityInput from '../../components/global/QuantityInput';
+import { ToastContainer } from "react-toastify";
+import toast from "../../components/global/toast";
+import "react-toastify/dist/ReactToastify.css";
 Axios.defaults.baseURL = "http://localhost:3000/api";
 Axios.defaults.withCredentials = true;
 const Details = ({ data }) => {
@@ -35,14 +38,15 @@ const Details = ({ data }) => {
             if(cart_id==null)
             {
                 localStorage.setItem("cart_uuid", res.data.cart._id);
-            }   
+            }
+            toast({ type: "success", message: "Item added into cart!" });
+     
+    
             
         })
 
       }
     useEffect(() => {
-
-        
         if (data) {
             Axios.post('/related-products/',data).then(res => {
                 setRProducts(res.data.product);
@@ -51,7 +55,18 @@ const Details = ({ data }) => {
     }, [])
     return (
         <div>
-            <Header />
+            <ToastContainer
+                position="top-right"
+                hideProgressBar={true}
+                newestOnTop={false}
+                draggable={false}
+                pauseOnVisibilityChange
+                closeOnClick
+            />
+           
+                <Header />
+
+           
             <Navbar />
             {/* breadcrumb start  */}
             <div className="container flex py-4 items-center gap-2">

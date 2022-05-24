@@ -12,9 +12,10 @@ import Axios from "axios";
 
 Axios.defaults.baseURL = "http://localhost:3000/api";
 Axios.defaults.withCredentials = true;
-
+import {CartProvider} from "../context/cartContext"
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+
+  return ( <CartProvider><Component {...pageProps} /></CartProvider> )
 }
 
 // Only uncomment this method if you have blocking data requirements for

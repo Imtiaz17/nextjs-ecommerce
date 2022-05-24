@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+
 export const HomeProduct = (props) => {
     return (
         <div>

@@ -1,4 +1,5 @@
 import Axios from "axios";
+import Link from "next/link"
 import { useEffect, useState } from 'react';
 export const Navbar = () => {
     const [categories, setCategories] = useState([]);
@@ -30,9 +31,16 @@ export const Navbar = () => {
                         <div
                             className="absolute w-full left-15 top-full bg-white shadow-md divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-80 overflow-auto ">
                             {categories.map((cat, i) => {
-                                return <a className="flex items-center py-3 px-6 hover:bg-gray-100 transition" key={i}>
-                                    <span className="text-gray-600 text-sm">{cat.name}</span>
-                                </a>
+                                return <Link href={`/category/${cat.slug}`} key={i}>
+                                    <a className="flex items-center py-3 px-6 hover:bg-gray-100 transition">
+                                        <span className="text-gray-600 text-sm">{cat.name}</span>
+                                    </a>
+                                </Link>
+
+
+                                // return <a className="flex items-center py-3 px-6 hover:bg-gray-100 transition" key={i}>
+                                //         <span className="text-gray-600 text-sm">{cat.name}</span>
+                                //     </a>
                             })}
                         </div>
 
