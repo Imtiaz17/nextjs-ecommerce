@@ -3,13 +3,27 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react';
 import CartContext from "../context/cartContext";
 import { useContext } from "react";
-
+import QuantityInput from './global/QuantityInput';
+import Axios from "axios";
+Axios.defaults.baseURL = "http://localhost:3000/api";
+Axios.defaults.withCredentials = true;
+import toast from "./global/toast";
 export const Header = () => {
-    const { item } = useContext(CartContext)
+    const { cartItems,setCartItems}= useContext(CartContext)
+    const { updateCartItem,deleteCartItem } = useContext(CartContext);
     const [isSideMenu, setSideMenu] = useState(false)
-    const [cartId, setCartId] = useState('')
     const open = (isSideMenu) => {
         return setSideMenu(!isSideMenu)
+    }
+    const qtyIncChange = (product, qty) => {
+        updateCartItem(product,qty)
+    }
+    const qtyDecChange = (product, qty) => {
+        updateCartItem(product,qty)
+    }
+
+    const deleteItem= (product)=>{
+        deleteCartItem(product)
     }
     return (
         <div>
@@ -50,7 +64,7 @@ export const Header = () => {
                             </div>
                             <div className="text-xs leading-3">Cart</div>
                             <span
-                                className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">{item.length}</span>
+                                className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">{cartItems.length}</span>
                         </a>
 
                         <a href="" className="text-center text-gray-700 hover:text-primary transition relative">
@@ -78,45 +92,44 @@ export const Header = () => {
                                     </div>
                                 </div>
                             </div>
+                            
                             <div className="flex-grow w-full hover:overflow-scroll overflow-auto">
                                 <div className="w-full px-5 md:px-7">
-                                    {item.length > 0 ?
-                                        item.map(product => {
+                                    {cartItems.length > 0 ?
+                                        cartItems.map(product => {
                                             return <div className="group w-full h-auto flex justify-start text-brand-light py-4 md:py-7 border-b border-border-one border-opacity-70 relative last:border-b-0">
-                                                <div className="flex-0 rounded overflow-hidden shrink-0 cursor-pointer w-28" style={{ flexShrink: 0 }}>
-                                                    <img src="images/product/prod-1.png" alt="" />
+                                                <div className="flex-0 rounded overflow-hidden shrink-0 cursor-pointer w-14" style={{ flexShrink: 0 }}>
+                                                    <img src={`http://localhost:3000/public/${product.img}`} />
                                                 </div>
+
                                                 <div className="flex items-start justify-between w-full overflow-hidden">
                                                     <div className="pl-3 md:pl-4">
                                                         <a href="" className="block leading-5 transition-all text-brand-dark text-13px sm:text-sm lg:text-15px hover:text-brand">{product.name}</a>
-                                                        <div className="text-13px sm:text-sm text-brand-muted mt-1.5 block mb-2">1 each X <b>{product.qty}</b></div>
+                                                        <div className="text-13px sm:text-sm text-brand-muted mt-1.5 block mb-2">1 each X <b>{product.quantity}</b></div>
 
-                                                        <div className="flex border border-gray-300 text-gray-600 divide-x divide-gray-300 w-max">
-                                                            <div className="h-8 w-8 text-xl flex items-center justify-center cursor-pointer select-none">-</div>
-                                                            <div className="h-8 w-8 text-base flex items-center justify-center">4</div>
-                                                            <div className="h-8 w-8 text-xl flex items-center justify-center cursor-pointer select-none">+</div>
-                                                        </div>
+                                                        <QuantityInput name="counter" value={product} onQuantityInc={qtyIncChange} onQuantityDec={qtyDecChange} />
                                                     </div>
                                                 </div>
+
                                                 <div className="relativefont-semibold text-sm md:text-base text-brand-dark leading-5 shrink-0 min-w-[65px] md:min-w-[80px] justify-end">
-                                                    <span>${product.price}</span>
-                                                    <div className="absolute bottom-5">
+                                                    <span>${product.total_price}</span>
+                                                    <div className="absolute bottom-5"  onClick={() => deleteItem(product.product)}>
                                                         <i className="bi bi-x text-xl font-bold cursor-pointer"></i>
                                                     </div>
                                                 </div>
 
                                             </div>
-                                        }) : <div class="px-5 md:px-7 pt-8 pb-5 flex justify-center flex-col items-center">
-                                            <div class="flex mx-auto w-[220px] md:w-auto">
+                                        }) : <div className="px-5 md:px-7 pt-8 pb-5 flex justify-center flex-col items-center">
+                                            <div className="flex mx-auto w-[220px] md:w-auto">
                                                 <span>
                                                     <img src="images/empty-cart.webp" alt="" />
                                                 </span>
 
                                             </div>
-                                            <div class="text-brand-dark font-semibold text-brand-dark text-xl mb-1.5 pt-8">
+                                            <div className="text-brand-dark font-semibold text-brand-dark text-xl mb-1.5 pt-8">
                                                 Your cart is empty.
                                             </div>
-                                            <p class="text-brand-muted text-sm text-gray-600 leading-7 lg:leading-[27px] lg:text-15px">
+                                            <p className="text-brand-muted text-sm text-gray-600 leading-7 lg:leading-[27px] lg:text-15px">
                                                 Please add product to your cart list
                                             </p>
                                         </div>}
@@ -137,14 +150,14 @@ export const Header = () => {
                                         className="shrink-0 font-semibold text-base md:text-lg text-brand-dark -mt-0.5 min-w-[80px] text-right">
                                         $0.00</div>
                                 </div>
-                                {item.length > 0 ?
+                                {cartItems.length > 0 ?
                                     <div className="flex flex-col">
                                         <a className="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-primary focus:outline-none transition duration-300 hover:bg-opacity-90  text-white bg-fill-four hover:bg-fill-four"
                                             href="/"><span className="py-0.5">Proceed To Checkout</span></a>
                                     </div> :
-                                    <div class="flex flex-col">
-                                        <a class="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-gray-300 focus:outline-none transition duration-300 hover:bg-opacity-90 cursor-not-allowed text-gray-600 bg-fill-four hover:bg-fill-four"
-                                            href="/"><span class="py-0.5">Proceed To Checkout</span></a>
+                                    <div className="flex flex-col">
+                                        <a className="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-gray-300 focus:outline-none transition duration-300 hover:bg-opacity-90 cursor-not-allowed text-gray-600 bg-fill-four hover:bg-fill-four"
+                                            href="/"><span className="py-0.5">Proceed To Checkout</span></a>
                                     </div>}
                             </div>
 

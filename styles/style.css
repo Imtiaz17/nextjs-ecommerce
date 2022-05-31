@@ -40,7 +40,7 @@
 
 .drawer {
   position: fixed;
-  z-index: 9999;
+  z-index: 99;
   transition: width 0s ease .3s, height 0s ease .3s, transform .3s cubic-bezier(.78, .14, .15, .86);
 }
 

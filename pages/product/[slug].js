@@ -6,13 +6,14 @@ import Axios from "axios";
 import Image from 'next/image'
 import { HomeProduct } from '../../components/HomeProduct';
 import { useEffect, useState } from 'react';
+import { useContext } from "react";
+import CartContext from "../../context/cartContext";
 import QuantityInput from '../../components/global/QuantityInput';
-import { ToastContainer } from "react-toastify";
-import toast from "../../components/global/toast";
-import "react-toastify/dist/ReactToastify.css";
+
 Axios.defaults.baseURL = "http://localhost:3000/api";
 Axios.defaults.withCredentials = true;
 const Details = ({ data }) => {
+    const { addItemToCart } = useContext(CartContext);
     const [quantity, setQuantity] = useState(1);
     const [rProducts, setRProducts] = useState(1);
     const [cart, setCart] = useState({});
@@ -28,23 +29,8 @@ const Details = ({ data }) => {
         }
     }
     function addToCart(data) {
-        let cart_id=localStorage.getItem("cart_uuid")?localStorage.getItem("cart_uuid"):null
-        let item={
-            product:data.id,
-            quantity:quantity,
-            price:data.price,
-        }
-        Axios.post('/addtocart/',{cartItems:item,cart_id:cart_id}).then(res => {
-            if(cart_id==null)
-            {
-                localStorage.setItem("cart_uuid", res.data.cart._id);
-            }
-            toast({ type: "success", message: "Item added into cart!" });
-     
-    
-            
-        })
-
+        data.quantity=quantity
+        addItemToCart(data)
       }
     useEffect(() => {
         if (data) {
@@ -55,15 +41,6 @@ const Details = ({ data }) => {
     }, [])
     return (
         <div>
-            <ToastContainer
-                position="top-right"
-                hideProgressBar={true}
-                newestOnTop={false}
-                draggable={false}
-                pauseOnVisibilityChange
-                closeOnClick
-            />
-           
                 <Header />
 
            
@@ -197,7 +174,7 @@ const Details = ({ data }) => {
 
                     <div className="mt-4">
                         <h3 className="text-l text-gray-800 mb-1 uppercase font-medium">Quantity</h3>
-                        <QuantityInput name="counter" value={quantity} decrementCounter={qtyDecChange} incrementCounter={qtyIncChange} />
+                        <QuantityInput name="counter" value={quantity} onQuantityDec={qtyDecChange} onQuantityInc={qtyIncChange} />
 
                     </div>
 
