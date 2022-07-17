@@ -1,7 +1,7 @@
 import Image from 'next/image'
 export const Footer = () => {
     return (
-        <div>
+        <div className="mt-10">
             {/* footer */}
             <footer className="bg-white pt-16 pb-10 border-t border-gray-100">
                 <div className="container grid grid-cols-3 gap-10">

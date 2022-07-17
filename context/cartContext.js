@@ -9,9 +9,19 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
     const [cartItems, setCartItems] = useState([])
+    const [subtotal, setSubtotal] = useState(0)
     useEffect(() => {
         getCartItems()
     }, [])
+    useEffect(() => {
+        let price = 0;
+        if (cartItems && cartItems.length > 0) {
+            cartItems.forEach(item => {
+                price += Number(item.total_price)
+            });
+        }
+        setSubtotal(price)
+    }, [cartItems])
     const getCartItems = () => {
         if (localStorage.getItem('cart_uuid') !== null) {
             Axios.get(`/cart/${localStorage.getItem('cart_uuid')}`).then(res => {
@@ -34,6 +44,8 @@ export function CartProvider({ children }) {
         })
 
     };
+
+
 
     const deleteCartItem = async (product) => {
         let cart_id = localStorage.getItem("cart_uuid") ? localStorage.getItem("cart_uuid") : null
@@ -72,17 +84,17 @@ export function CartProvider({ children }) {
     };
     return (
         <div>
-        <ToastContainer
-            position="top-right"
-            hideProgressBar={true}
-            newestOnTop={false}
-            draggable={false}
-            pauseOnVisibilityChange
-            closeOnClick
-        />
-        
+            <ToastContainer
+                position="top-right"
+                hideProgressBar={true}
+                newestOnTop={false}
+                draggable={false}
+                pauseOnVisibilityChange
+                closeOnClick
+            />
 
-        <CartContext.Provider value={{ cartItems, setCartItems, addItemToCart, updateCartItem, deleteCartItem }}>{children}</CartContext.Provider>
+
+            <CartContext.Provider value={{ cartItems, setCartItems, addItemToCart, subtotal,updateCartItem, deleteCartItem }}>{children}</CartContext.Provider>
         </div>
     )
 }

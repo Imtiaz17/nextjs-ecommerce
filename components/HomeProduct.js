@@ -9,12 +9,12 @@ export const HomeProduct = (props) => {
                 {/* single product  */}
                 {props.data.map(item => {
 
-                    return <div className="bg-white shadow rounded overflow-hidden group">
+                    return <div className="bg-white shadow rounded overflow-hidden hover:shadow-2xl">
                         {/* product image  */}
                         <div className="relative w-40 h-40 mx-auto flex justify-center items-center">
                             <img src={`http://localhost:3000/public/${item.productPic[0].img}`} className="max-w-full max-h-full" alt="" />
-                            <div
-                                className="absolute inset-0 bg-black bg-opacity-40 flex justify-center items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                            {/* <div
+                                className="absolute inset-0 bg-gray-400 bg-opacity-40 flex justify-center items-center gap-2 opacity-0 group-hover:opacity-100 transition">
                                 <a href="#"
                                     className="text-white  w-9 h-8 rounded-full bg-primary flex justify-center items-center hover:bg-gray-800 transition">
                                     <i className="bi bi-search"></i>
@@ -23,7 +23,7 @@ export const HomeProduct = (props) => {
                                     className="text-white  w-9 h-8 rounded-full bg-primary flex justify-center items-center hover:bg-gray-800 transition">
                                     <i className="bi bi-heart"></i>
                                 </a>
-                            </div>
+                            </div> */}
                         </div>
                         {/* product image  */}
                         {/* product content */}
@@ -50,7 +50,7 @@ export const HomeProduct = (props) => {
                             </div>
                         </div>
                         <a href=""
-                            className="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition ">Add
+                            className="block w-full py-2 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition ">Add
                             to cart</a>
                         {/* product content */}
                     </div>

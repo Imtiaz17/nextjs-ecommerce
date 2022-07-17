@@ -9,22 +9,30 @@ Axios.defaults.baseURL = "http://localhost:3000/api";
 Axios.defaults.withCredentials = true;
 import toast from "./global/toast";
 export const Header = () => {
-    const { cartItems,setCartItems}= useContext(CartContext)
-    const { updateCartItem,deleteCartItem } = useContext(CartContext);
+    const { cartItems, setCartItems } = useContext(CartContext)
+    const { subtotal } = useContext(CartContext)
+    const { updateCartItem, deleteCartItem } = useContext(CartContext);
     const [isSideMenu, setSideMenu] = useState(false)
+    const [user, setUser] = useState('')
     const open = (isSideMenu) => {
         return setSideMenu(!isSideMenu)
     }
     const qtyIncChange = (product, qty) => {
-        updateCartItem(product,qty)
+        updateCartItem(product, qty)
     }
     const qtyDecChange = (product, qty) => {
-        updateCartItem(product,qty)
+        updateCartItem(product, qty)
     }
 
-    const deleteItem= (product)=>{
+    const deleteItem = (product) => {
         deleteCartItem(product)
     }
+    useEffect(() => {
+        if (localStorage.getItem('user')) {
+            console.log(localStorage.getItem('user'))
+            setUser(JSON.parse(localStorage.getItem('user')))
+        }
+    }, [])
     return (
         <div>
             {/* header */}
@@ -66,13 +74,51 @@ export const Header = () => {
                             <span
                                 className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">{cartItems.length}</span>
                         </a>
-
-                        <a href="" className="text-center text-gray-700 hover:text-primary transition relative">
+                        <div className="text-center text-gray-700 hover:text-primary transition  cursor-pointer relative group">
                             <div className="text-2xl">
                                 <i className="bi bi-person"></i>
                             </div>
                             <div className="text-xs leading-3">Account</div>
-                        </a>
+                            <div
+                                className="absolute w-52 -left-20 top-34 bg-white shadow-md px-4 pt-4 pb-2 opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-80 overflow-auto ">
+                                {user ? <div className="flex">
+                                    welcome {user.firstName}
+                                </div>
+                                    : <div className="flex justify-between">
+                                        <button className="bg-primary text-white py-1 px-1 rounded text-sm border font-semibold hover:bg-white hover:border-primary hover:text-primary w-20">  <Link href="/login" >
+                                            Login
+                                        </Link></button>
+
+                                        <button className="bg-white text-primary border border-primary py-1 px-1 rounded text-sm font-semibold hover:bg-primary hover:border-primary hover:text-white w-20"><Link href="/signup" >
+                                            Signup
+                                        </Link></button>
+                                    </div>}
+
+                                <div className="relative mt-1">
+                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                        <i class="bi bi-person-circle"></i>
+                                        <span className="text-gray-600 text-sm hover:text-primary"> <Link href="/account">My Account</Link></span>
+                                    </a>
+                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                        <i class="bi bi-gift"></i>
+                                        <span className="text-gray-600 text-sm hover:text-primary">My Order</span>
+                                    </a>
+                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                        <i class="bi bi-heart"></i>
+                                        <span className="text-gray-600 text-sm hover:text-primary">My Wishlist</span>
+                                    </a>
+                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                        <i class="bi bi-pin-map"></i>
+                                        <span className="text-gray-600 text-sm hover:text-primary">Track Order</span>
+                                    </a>
+                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                        <i class="bi bi-power"></i>
+                                        <span className="text-gray-600 text-sm hover:text-primary">Logout</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </header>
@@ -92,7 +138,7 @@ export const Header = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="flex-grow w-full hover:overflow-scroll overflow-auto">
                                 <div className="w-full px-5 md:px-7">
                                     {cartItems.length > 0 ?
@@ -113,7 +159,7 @@ export const Header = () => {
 
                                                 <div className="relativefont-semibold text-sm md:text-base text-brand-dark leading-5 shrink-0 min-w-[65px] md:min-w-[80px] justify-end">
                                                     <span>${product.total_price}</span>
-                                                    <div className="absolute bottom-5"  onClick={() => deleteItem(product.product)}>
+                                                    <div className="absolute bottom-5" onClick={() => deleteItem(product.product)}>
                                                         <i className="bi bi-x text-xl font-bold cursor-pointer"></i>
                                                     </div>
                                                 </div>
@@ -148,16 +194,23 @@ export const Header = () => {
                                     </div>
                                     <div
                                         className="shrink-0 font-semibold text-base md:text-lg text-brand-dark -mt-0.5 min-w-[80px] text-right">
-                                        $0.00</div>
+                                        {subtotal}</div>
                                 </div>
                                 {cartItems.length > 0 ?
                                     <div className="flex flex-col">
-                                        <a className="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-primary focus:outline-none transition duration-300 hover:bg-opacity-90  text-white bg-fill-four hover:bg-fill-four"
-                                            href="/"><span className="py-0.5">Proceed To Checkout</span></a>
+                                         <Link href="/checkout">
+                                            <a className="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-primary focus:outline-none transition duration-300 hover:bg-opacity-90  text-white bg-fill-four hover:bg-fill-four">
+                                      
+                                           <span className="py-0.5">Proceed To Checkout</span></a>
+                                           
+                                           </Link>
                                     </div> :
                                     <div className="flex flex-col">
-                                        <a className="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-gray-300 focus:outline-none transition duration-300 hover:bg-opacity-90 cursor-not-allowed text-gray-600 bg-fill-four hover:bg-fill-four"
-                                            href="/"><span className="py-0.5">Proceed To Checkout</span></a>
+                                        <a href="#" className="w-full px-5 py-3 md:py-4 flex items-center justify-center bg-heading rounded font-semibold text-sm sm:text-15px text-brand-light bg-gray-300 focus:outline-none transition duration-300 hover:bg-opacity-90 cursor-not-allowed text-gray-600 bg-fill-four hover:bg-fill-four">
+                                             
+                                            <span className="py-0.5">Proceed To Checkout</span>
+                                        </a>
+
                                     </div>}
                             </div>
 

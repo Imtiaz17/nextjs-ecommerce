@@ -18,11 +18,11 @@ export const Navbar = () => {
     return (
         <div>
             {/* navbar */}
-            <nav className="shadow-sm">
+            <nav className="">
                 <div className="container flex justify-between">
                     {/* all category */}
                     <div className="px-8 py-4 flex items-center cursor-pointer relative group">
-                        <div className="bg-primary py-2 px-6 rounded-md">
+                        <div className="bg-primary py-2 px-6 rounded">
                             <span className="text-white">
                                 <i className="bi bi-list"></i>
                             </span>
