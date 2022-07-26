@@ -31,6 +31,7 @@ export function CartProvider({ children }) {
             setCartItems([])
         }
     }
+
     const updateCartItem = async (product, qty) => {
         let cart_id = localStorage.getItem("cart_uuid") ? localStorage.getItem("cart_uuid") : null
         const singleItem = cartItems.find(e => e.product == product);
@@ -94,7 +95,7 @@ export function CartProvider({ children }) {
             />
 
 
-            <CartContext.Provider value={{ cartItems, setCartItems, addItemToCart, subtotal,updateCartItem, deleteCartItem }}>{children}</CartContext.Provider>
+            <CartContext.Provider value={{ cartItems, setCartItems, addItemToCart, subtotal,updateCartItem,getCartItems, deleteCartItem }}>{children}</CartContext.Provider>
         </div>
     )
 }

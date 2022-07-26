@@ -95,14 +95,18 @@ export const Header = () => {
                                     </div>}
 
                                 <div className="relative mt-1">
-                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                    <div className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
                                         <i class="bi bi-person-circle"></i>
-                                        <span className="text-gray-600 text-sm hover:text-primary"> <Link href="/account">My Account</Link></span>
-                                    </a>
-                                    <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
+                                        <span className="text-gray-600 text-sm hover:text-primary">
+                                            <Link href="/account">My Account</Link>
+                                        </span>
+                                    </div>
+                                    <div className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
                                         <i class="bi bi-gift"></i>
-                                        <span className="text-gray-600 text-sm hover:text-primary">My Order</span>
-                                    </a>
+                                        <span className="text-gray-600 text-sm hover:text-primary">
+                                        <Link href="/order">My Order </Link>
+                                        </span>
+                                    </div>
                                     <a className="flex text-gray-600  items-center gap-2 py-2 px-1 transition hover:text-primary">
                                         <i class="bi bi-heart"></i>
                                         <span className="text-gray-600 text-sm hover:text-primary">My Wishlist</span>

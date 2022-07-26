@@ -1,4 +1,5 @@
 import { Header } from '../components/Header';
+import { useRouter } from 'next/router';
 import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
 import { useContext } from "react";
@@ -14,10 +15,12 @@ Axios.interceptors.request.use(function (config) {
 });
 import CartContext from "../context/cartContext";
 export default function Checkout() {
-    const { cartItems, setCartItems } = useContext(CartContext)
+    const router = useRouter();
+    const { cartItems, setCartItems, getCartItems } = useContext(CartContext)
     const { subtotal } = useContext(CartContext)
     const [address, setAddress] = useState([]);
     const [addressId, setAddressId] = useState('');
+    const [loading, isLoading] = useState(false);
     useEffect(() => {
         Axios.get('user/getaddress').then(res => {
             setAddress(res.data.userAddress.address)
@@ -36,17 +39,25 @@ export default function Checkout() {
         setAddressId(info._id)
     }
     const placeOrder = () => {
+        isLoading(true)
+        const cartId = localStorage.getItem('cart_uuid');
         const totalAmount = subtotal
         const items = cartItems
         const paymentStatus = 'pending'
         const paymentType = 'cod'
         const payload = {
-            addressId, totalAmount, items, paymentStatus, paymentType
+            cartId, addressId, totalAmount, items, paymentStatus, paymentType
         }
+
+
         Axios.post('addOrder', payload).then(res => {
-            toast({ type: "success", message: "Order has been places successfully !" });
+            localStorage.removeItem('cart_uuid');
+            getCartItems();
+            router.push("/order-completed");
+            isLoading(false)
         })
             .catch(e => {
+            isLoading(false)
                 console.log(e)
             })
     }
@@ -115,7 +126,12 @@ export default function Checkout() {
                                     <p className="font-semibold text-black">${subtotal}</p>
                                 </div>
                                 <div className="flex items-center">
-                                    <button onClick={() => placeOrder()} className="bg-primary text-white py-3 px-8 rounded text-sm font-semibold hover:bg-opacity-75 w-full">Place Order</button>
+
+                                <button onClick={() => placeOrder()} className={"bg-primary text-white py-3 px-4 rounded text-sm font-semibold hover:bg-white hover:text-primary  border-transparent border-2 hover:border-current hover:border-primary w-full"  + (loading ? " opacity-25 cursor-not-allowed" : "")} >Place Order</button>
+
+
+
+                                    {/* <button onClick={() => placeOrder()} className="bg-primary text-white py-3 px-8 rounded text-sm font-semibold hover:bg-opacity-75 w-full">Place Order</button> */}
                                 </div>
 
                             </div>
