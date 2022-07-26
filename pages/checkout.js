@@ -14,24 +14,46 @@ Axios.interceptors.request.use(function (config) {
 });
 import CartContext from "../context/cartContext";
 export default function Checkout() {
+    const { cartItems, setCartItems } = useContext(CartContext)
+    const { subtotal } = useContext(CartContext)
     const [address, setAddress] = useState([]);
+    const [addressId, setAddressId] = useState('');
     useEffect(() => {
         Axios.get('user/getaddress').then(res => {
             setAddress(res.data.userAddress.address)
         })
     }, [])
-    const addresstype= (type) =>{
-        if(type==1){
+    const addresstype = (type) => {
+        if (type == 1) {
             return 'Shipping'
-        }else if(type==2){
+        } else if (type == 2) {
             return 'Billing'
-        }else if(type==3){
+        } else if (type == 3) {
             return 'Both (Shipping & Billing)'
         }
     }
+    const activeAdress = (info) => {
+        setAddressId(info._id)
+    }
+    const placeOrder = () => {
+        const totalAmount = subtotal
+        const items = cartItems
+        const paymentStatus = 'pending'
+        const paymentType = 'cod'
+        const payload = {
+            addressId, totalAmount, items, paymentStatus, paymentType
+        }
+        Axios.post('addOrder', payload).then(res => {
+            toast({ type: "success", message: "Order has been places successfully !" });
+        })
+            .catch(e => {
+                console.log(e)
+            })
+    }
 
-    const { cartItems, setCartItems } = useContext(CartContext)
-    const { subtotal } = useContext(CartContext)
+
+
+
     return (
         <div>
             <Header />
@@ -56,15 +78,14 @@ export default function Checkout() {
                 <div className="lg:col-span-8 sm:col-span-12">
                     <p className="font-semibold mb-5">Delivery & Billing Details</p>
                     <div className="mt-5 flex gap-4">
-                    {address.length > 0 ?address.map(info => {
-                        return  <div className="shadow-lg px-4 py-3 cursor-pointer">
-                            <p className="font-semibold">{addresstype(info.addressType)}</p>
-                            <p className="pt-3">{info.address}</p>
-                        </div>
-                          }):<h4 className="text-lg text-gray-400"> Please add address before placeing order</h4>}
-                        
+                        {address.length > 0 ? address.map(info => {
+                            return <div className={'border border-gray-300 px-4 py-3 cursor-pointer relative ' + (info._id == addressId ? "shadow-lg border-red-500 border-4" : "border-gray-300")} onClick={() => activeAdress(info)}>
+                                <div className={info._id == addressId ? "absolute -top-1.5 -right-1 text-red-500 font-bold bg-white" : "hidden"}><i className="bi bi-check-circle"></i></div>
+                                <p className="font-semibold">{addresstype(info.addressType)}</p>
+                                <p className="pt-3">{info.address}</p>
+                            </div>
+                        }) : <h4 className="text-lg text-gray-400"> Please add address before placeing order</h4>}
                     </div>
-                    
                 </div>
                 <div className="lg:col-span-4 sm:col-span-12">
                     <p className="font-semibold mb-5">YOUR ORDER</p>
@@ -91,10 +112,10 @@ export default function Checkout() {
                                 </div>
                                 <div className="flex justify-between text-gray-500 text-base pb-5">
                                     <p className="font-semibold text-black">Total</p>
-                                    <p className="font-semibold text-black">$100</p>
+                                    <p className="font-semibold text-black">${subtotal}</p>
                                 </div>
                                 <div className="flex items-center">
-                                    <button className="bg-primary text-white py-3 px-8 rounded text-sm font-semibold hover:bg-opacity-75 w-full">Place Order</button>
+                                    <button onClick={() => placeOrder()} className="bg-primary text-white py-3 px-8 rounded text-sm font-semibold hover:bg-opacity-75 w-full">Place Order</button>
                                 </div>
 
                             </div>
